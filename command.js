@@ -236,6 +236,30 @@ const handleCommand = (message) => {
     } | ${currentgames[gameIndex].board[8]}
     ${currentgames[gameIndex].current}'s move`);
   }
+
+  // If player wants to quit game or close challanges
+  if (command === "close_ttt") {
+    var gameIndexOpen = openrequests.findIndex(
+      (game) => game.challenger.id === message.author.id
+    );
+    if (gameIndexOpen !== -1) {
+      openrequests.splice(gameIndexOpen, 1);
+      message.channel.send("Closed your challenge.");
+      return;
+    }
+    var gameIndexOngoing = currentgames.findIndex(
+      (game) =>
+        game.challenger.id === message.author.id ||
+        game.accepter.id === message.author.id
+    );
+    if (gameIndexOngoing !== -1) {
+      currentgames.splice(gameIndexOngoing, 1);
+      message.channel.send(
+        "Closed your current game. Inform someone who was playing with you."
+      );
+      return;
+    }
+  }
 };
 
 const checkWin = (oldboard) => {
