@@ -260,6 +260,22 @@ const handleCommand = (message) => {
       return;
     }
   }
+
+  // Help command for info
+  if (command === "info_ttt") {
+    message.channel.send(
+      `List of commands
+      - Start a challange with !start_ttt
+      - Accept a challange with !accept_ttt <gameID>
+          gameID was shared while starting a game
+      - while in game to mark your move use !m <index_of_row>[1,2,3] <index_of_column>[1,2,3]
+      - Close your challange or current game with !close_ttt
+      
+      There are very high possibalities that game might not work properly but I tried my best.
+      If you want to contribute to this bot then take a tour here.
+      https://github.com/PhoenixCreation/Discord_TicTacToe`
+    );
+  }
 };
 
 const checkWin = (oldboard) => {
