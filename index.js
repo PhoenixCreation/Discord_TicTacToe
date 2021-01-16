@@ -1,7 +1,9 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import Discord from "discord.js";
 const client = new Discord.Client();
-// TODO : Shift token to env file
-client.login("Nzk5ODYwMzE2NzQxMTczMjQ4.YAJt-A.vPKJ79KkMzfNFjQ792kQEk4WOfk");
+client.login(process.env.DISCORD_TOKEN);
 
 import handleCommand from "./command.js";
 

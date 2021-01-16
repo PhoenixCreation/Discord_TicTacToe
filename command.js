@@ -83,12 +83,32 @@ const handleCommand = (message) => {
       return;
     }
 
+    // If user has already open challange
+    const gameIndexc = openrequests.findIndex(
+      (game) => game.challenger.id == message.author.id
+    );
+
+    if (gameIndexc !== -1) {
+      message.channel.send("You alredy have an open challange");
+      return;
+    }
+
+    // If this user is already playing another game
+    const currentgameIndex = currentgames.findIndex(
+      (game) =>
+        game.challenger.id === message.author.id ||
+        game.accepter.id === message.author.id
+    );
+    if (currentgameIndex !== -1) {
+      message.channel.send("You alredy have an ongoing challange");
+      return;
+    }
     // Start the Game process
     var gameData = {
       gameID,
       challenger: openrequests[gameIndex].challenger,
       accepter: message.author,
-      board: new Array(9).fill("-"),
+      board: new Array(9).fill("--"),
       status: "ongoing",
       current: "challenger",
     };
@@ -104,9 +124,9 @@ const handleCommand = (message) => {
       `${gameData.challenger.username} -> " X " vs ${gameData.accepter.username} -> " O "
       Starting empty game
       Current move: ${gameData.challenger.username}
-      - | - | -
-      - | - | -
-      - | - | -
+      -- | -- | --
+      -- | -- | --
+      -- | -- | --
       Fight
       
       To play use !m <index_of_row>[1,2,3] <index_of_column>[1,2,3]`
@@ -167,7 +187,7 @@ const handleCommand = (message) => {
     }
 
     // If place is alredy played
-    if (currentgames[gameIndex].board[(i - 1) * 3 + (j - 1)] !== "-") {
+    if (currentgames[gameIndex].board[(i - 1) * 3 + (j - 1)] !== "--") {
       message.channel.send("Place alredy played. Try another place.");
       return;
     }
@@ -179,6 +199,27 @@ const handleCommand = (message) => {
         ? "accepter"
         : "challenger";
 
+    var result = checkWin(currentgames[gameIndex].board);
+
+    if (result === "draw") {
+      message.channel.send("Game draw. Both are good. Keep it up.");
+      currentgames.splice(gameIndex, 1);
+      return;
+    }
+    if (result === "X") {
+      message.channel.send(
+        `Challanger ${currentgames[gameIndex].challenger.username} Won!!!🎊🎊🎊`
+      );
+      currentgames.splice(gameIndex, 1);
+      return;
+    }
+    if (result === "O") {
+      message.channel.send(
+        `Accepter ${currentgames[gameIndex].accepter.username} Won!!!🎊🎊🎊`
+      );
+      currentgames.splice(gameIndex, 1);
+      return;
+    }
     // Show board to users
     message.channel.send(`${
       currentgames[gameIndex].challenger.username
@@ -198,7 +239,7 @@ const handleCommand = (message) => {
 };
 
 const checkWin = (oldboard) => {
-  const newboard = [
+  const board = [
     [oldboard[0], oldboard[1], oldboard[2]],
     [oldboard[3], oldboard[4], oldboard[5]],
     [oldboard[6], oldboard[7], oldboard[8]],
@@ -206,21 +247,71 @@ const checkWin = (oldboard) => {
 
   // check X win
   var xwin = false;
+  if (board[0][0] === "X" && board[0][1] === "X" && board[0][2] === "X") {
+    xwin = true;
+  }
+  if (board[1][0] === "X" && board[1][1] === "X" && board[1][2] === "X") {
+    xwin = true;
+  }
+  if (board[2][0] === "X" && board[2][1] === "X" && board[2][2] === "X") {
+    xwin = true;
+  }
+  if (board[0][0] === "X" && board[1][0] === "X" && board[2][0] === "X") {
+    xwin = true;
+  }
+  if (board[0][1] === "X" && board[1][1] === "X" && board[2][1] === "X") {
+    xwin = true;
+  }
+  if (board[0][2] === "X" && board[1][2] === "X" && board[2][2] === "X") {
+    xwin = true;
+  }
+  if (board[0][0] === "X" && board[1][1] === "X" && board[2][2] === "X") {
+    xwin = true;
+  }
+  if (board[0][2] === "X" && board[1][1] === "X" && board[2][0] === "X") {
+    xwin = true;
+  }
+
   if (xwin) {
     return "X";
   }
 
   // check O win
   var owin = false;
+  if (board[0][0] === "O" && board[0][1] === "O" && board[0][2] === "O") {
+    owin = true;
+  }
+  if (board[1][0] === "O" && board[1][1] === "O" && board[1][2] === "O") {
+    owin = true;
+  }
+  if (board[2][0] === "O" && board[2][1] === "O" && board[2][2] === "O") {
+    owin = true;
+  }
+  if (board[0][0] === "O" && board[1][0] === "O" && board[2][0] === "O") {
+    owin = true;
+  }
+  if (board[0][1] === "O" && board[1][1] === "O" && board[2][1] === "O") {
+    owin = true;
+  }
+  if (board[0][2] === "O" && board[1][2] === "O" && board[2][2] === "O") {
+    owin = true;
+  }
+  if (board[0][0] === "O" && board[1][1] === "O" && board[2][2] === "O") {
+    owin = true;
+  }
+  if (board[0][2] === "O" && board[1][1] === "O" && board[2][0] === "O") {
+    owin = true;
+  }
+
   if (owin) {
-    return "X";
+    return "O";
   }
 
   // check draw
   var draw = true;
   for (let i = 0; i < oldboard.length; i++) {
     const element = oldboard[i];
-    if (element === "-") {
+    if (element === "--") {
       draw = false;
     }
   }
