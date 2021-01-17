@@ -6,7 +6,10 @@ This is challange based architecture where one player challanges and other accep
 
 ## Live Demo
 
-`Comming soon...`
+Add this bot to your discord servers.
+https://discord.com/api/oauth2/authorize?client_id=799860316741173248&permissions=0&scope=bot
+
+There might be chances that bot won't be online due to server timeout. Generally this happens in the last week of the month. Be patient till 1st of every month.
 
 ## How to use?
 
@@ -47,10 +50,16 @@ This is challange based architecture where one player challanges and other accep
 
 ## Found a problem?
 
-- Found a problem? Don't hasitate to create issue...
+- If the bot from the live link is not working in last week of the month then please wait till next month's 1st. This problem is related to hosting service.
+
+- Found any other problem? Don't hasitate to create issue...
 
 ## Contributions
 
 - Always welcomed.
+
+## Contributors
+
+- PhoenixCreation (Het Patel)
 
 ## If you liked then give this repo a 🌟
